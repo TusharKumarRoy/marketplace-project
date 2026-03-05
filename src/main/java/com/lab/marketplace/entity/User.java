@@ -38,6 +38,7 @@ public class User {
     private String phoneNumber;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean enabled = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
