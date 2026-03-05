@@ -1,6 +1,5 @@
 package com.lab.marketplace.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,7 +7,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,10 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
-
-    private final UserDetailsService userDetailsService;
 
     /**
      * Password encoder using BCrypt
@@ -46,20 +41,22 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity (enable in production)
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
-                .requestMatchers("/", "/home", "/login", "/register", "/css/**", "/js/**", "/images/**").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/", "/home", "/login", "/register").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
+                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                .requestMatchers("/api/products", "/api/products/**").permitAll() // Public product browsing
                 
                 // Admin endpoints
-                .requestMatchers("/admin/**", "/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 
-                // Seller endpoints
-                .requestMatchers("/seller/**", "/api/products/manage/**").hasRole("SELLER")
+                // Seller endpoints - product management
+                .requestMatchers("/seller/**").hasRole("SELLER")
                 
                 // Buyer endpoints
-                .requestMatchers("/buyer/**", "/api/orders/my-orders").hasRole("BUYER")
+                .requestMatchers("/buyer/**").hasRole("BUYER")
                 
-                // Product viewing - accessible to all authenticated users
-                .requestMatchers("/products/**", "/api/products").authenticated()
+                // API endpoints with role-based access
+                .requestMatchers("/api/auth/me").authenticated()
                 
                 // All other requests need authentication
                 .anyRequest().authenticated()
@@ -67,7 +64,7 @@ public class SecurityConfig {
             .formLogin(form -> form
                 .loginPage("/login")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/home", true)
+                .defaultSuccessUrl("/", true)
                 .failureUrl("/login?error=true")
                 .permitAll()
             )
@@ -79,7 +76,7 @@ public class SecurityConfig {
                 .permitAll()
             )
             .exceptionHandling(exception -> exception
-                .accessDeniedPage("/access-denied")
+                .accessDeniedPage("/login?error=access-denied")
             );
 
         return http.build();
