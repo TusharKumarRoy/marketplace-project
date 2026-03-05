@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - Marketplace</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Seller Dashboard</h1>
+            <div class="user-info">
+                <span th:text="${username}">Username</span>
+                <a th:href="@{/logout}" class="btn btn-secondary">Logout</a>
+            </div>
+        </header>
+        
+        <main>
+            <div class="welcome-section">
+                <h2>Welcome to Seller Dashboard</h2>
+                <p>Manage your products and view orders here.</p>
+            </div>
+            
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h3>My Products</h3>
+                    <p>View and manage your product listings</p>
+                    <a href="#" class="btn btn-primary">View Products</a>
+                </div>
+                
+                <div class="card">
+                    <h3>Orders</h3>
+                    <p>Track orders for your products</p>
+                    <a href="#" class="btn btn-primary">View Orders</a>
+                </div>
+                
+                <div class="card">
+                    <h3>Add Product</h3>
+                    <p>List a new product for sale</p>
+                    <a href="#" class="btn btn-primary">Add New</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

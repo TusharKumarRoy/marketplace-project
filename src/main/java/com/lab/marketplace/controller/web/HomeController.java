@@ -23,11 +23,11 @@ public class HomeController {
             log.info("Redirecting admin user to dashboard");
             return "redirect:/admin/dashboard";
         } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_SELLER"))) {
-            log.info("Redirecting seller user to products");
-            return "redirect:/seller/products";
+            log.info("Redirecting seller user to seller dashboard");
+            return "redirect:/seller/dashboard";
         } else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_BUYER"))) {
-            log.info("Redirecting buyer user to products");
-            return "redirect:/products";
+            log.info("Redirecting buyer user to buyer dashboard");
+            return "redirect:/buyer/dashboard";
         }
         
         return "redirect:/login";

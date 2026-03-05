@@ -12,10 +12,10 @@
             <h1>Login to Marketplace</h1>
             
             <!-- Success Message -->
-            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${success != null and !#strings.isEmpty(success)}" class="alert alert-success" th:text="${success}"></div>
             
             <!-- Error Message -->
-            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+            <div th:if="${error != null and !#strings.isEmpty(error)}" class="alert alert-error" th:text="${error}"></div>
             <div th:if="${param.error}" class="alert alert-error">Invalid username or password</div>
             <div th:if="${param.logout}" class="alert alert-success">You have been logged out successfully</div>
             
