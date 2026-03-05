@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>User Management</h1>
+            <div class="user-info">
+                <span sec:authentication="name">Username</span>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+            </div>
+        </header>
+        
+        <nav class="admin-nav">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <a th:href="@{/admin/users}" class="active">Users</a>
+            <a th:href="@{/admin/orders}">Orders</a>
+        </nav>
+        
+        <main>
+            <div class="filter-section">
+                <h2>Filter Users</h2>
+                <form th:action="@{/admin/users}" method="get" class="filter-form">
+                    <select name="role" id="role">
+                        <option value="">All Users</option>
+                        <option value="ADMIN" th:selected="${selectedRole == 'ADMIN'}">Admins</option>
+                        <option value="SELLER" th:selected="${selectedRole == 'SELLER'}">Sellers</option>
+                        <option value="BUYER" th:selected="${selectedRole == 'BUYER'}">Buyers</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary">Filter</button>
+                </form>
+            </div>
+            
+            <div class="users-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Full Name</th>
+                            <th>Roles</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.id}">1</td>
+                            <td th:text="${user.username}">username</td>
+                            <td th:text="${user.email}">email@example.com</td>
+                            <td th:text="${user.fullName}">Full Name</td>
+                            <td>
+                                <span th:each="role, iterStat : ${user.roles}">
+                                    <span th:text="${role}">ROLE</span>
+                                    <span th:if="${!iterStat.last}">, </span>
+                                </span>
+                            </td>
+                            <td>
+                                <span th:if="${user.enabled}" class="status-active">Active</span>
+                                <span th:unless="${user.enabled}" class="status-inactive">Inactive</span>
+                            </td>
+                            <td>
+                                <form th:action="@{/admin/users/{id}/toggle-status(id=${user.id})}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn btn-small">
+                                        <span th:if="${user.enabled}">Disable</span>
+                                        <span th:unless="${user.enabled}">Enable</span>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div th:if="${#lists.isEmpty(users)}" class="no-data">
+                    <p>No users found</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
