@@ -47,6 +47,7 @@ jobs:
           SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/marketplace_db_test
           SPRING_DATASOURCE_USERNAME: marketplace_user
           SPRING_DATASOURCE_PASSWORD: marketplace_pass
+          SPRING_DATASOURCE_DRIVER: org.postgresql.Driver
         run: mvn test -B
 
       - name: Package application
