@@ -34,4 +34,7 @@ public class ProductRequest {
     @NotBlank(message = "Category is required")
     @Size(min = 2, max = 50, message = "Category must be between 2 and 50 characters")
     private String category;
+    
+    @Size(max = 500, message = "Image URL must not exceed 500 characters")
+    private String imageUrl;
 }

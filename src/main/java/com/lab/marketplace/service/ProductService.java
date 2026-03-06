@@ -4,7 +4,6 @@ import com.lab.marketplace.dto.ProductRequest;
 import com.lab.marketplace.dto.ProductResponse;
 import com.lab.marketplace.entity.Product;
 import com.lab.marketplace.entity.User;
-import com.lab.marketplace.exception.BadRequestException;
 import com.lab.marketplace.exception.ResourceNotFoundException;
 import com.lab.marketplace.exception.UnauthorizedException;
 import com.lab.marketplace.repository.ProductRepository;
@@ -43,6 +42,7 @@ public class ProductService {
                 .price(request.getPrice())
                 .stock(request.getStock())
                 .category(request.getCategory())
+                .imageUrl(request.getImageUrl())
                 .seller(seller)
                 .build();
         
@@ -69,6 +69,7 @@ public class ProductService {
         product.setPrice(request.getPrice());
         product.setStock(request.getStock());
         product.setCategory(request.getCategory());
+        product.setImageUrl(request.getImageUrl());
         
         Product updatedProduct = productRepository.save(product);
         log.info("Product updated successfully: {}", updatedProduct.getName());
