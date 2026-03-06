@@ -21,6 +21,7 @@ public class ProductResponse {
     private BigDecimal price;
     private Integer stock;
     private String category;
+    private String imageUrl;
     private Long sellerId;
     private String sellerUsername;
     private LocalDateTime createdAt;
@@ -34,6 +35,7 @@ public class ProductResponse {
                 .price(product.getPrice())
                 .stock(product.getStock())
                 .category(product.getCategory())
+                .imageUrl(product.getImageUrl())
                 .sellerId(product.getSeller().getId())
                 .sellerUsername(product.getSeller().getUsername())
                 .createdAt(product.getCreatedAt())
