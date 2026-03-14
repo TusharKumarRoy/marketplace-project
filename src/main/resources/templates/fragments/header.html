@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<body>
+<header th:fragment="siteHeader(title)">
+    <h1 th:text="${title}">Marketplace</h1>
+    <div class="user-info">
+        <span sec:authentication="name">Username</span>
+        <form th:action="@{/logout}" method="post" style="display: inline;">
+            <button type="submit" class="btn btn-secondary">Logout</button>
+        </form>
+    </div>
+</header>
+
+<nav th:fragment="roleNav(activeTab)" class="admin-nav">
+    <a th:href="@{/products}"
+       th:classappend="${activeTab == 'products'} ? ' active' : ''">Products</a>
+
+    <a sec:authorize="hasRole('SELLER')" th:href="@{/seller/dashboard}"
+       th:classappend="${activeTab == 'seller-dashboard'} ? ' active' : ''">Seller Dashboard</a>
+    <a sec:authorize="hasRole('SELLER')" th:href="@{/seller/products}"
+       th:classappend="${activeTab == 'seller-products'} ? ' active' : ''">Manage Products</a>
+    <a sec:authorize="hasRole('SELLER')" th:href="@{/seller/orders}"
+       th:classappend="${activeTab == 'seller-orders'} ? ' active' : ''">Seller Orders</a>
+
+    <a sec:authorize="hasRole('BUYER')" th:href="@{/buyer/dashboard}"
+       th:classappend="${activeTab == 'buyer-dashboard'} ? ' active' : ''">Buyer Dashboard</a>
+    <a sec:authorize="hasRole('BUYER')" th:href="@{/cart}" class="cart-nav-link"
+       th:classappend="${activeTab == 'buyer-cart'} ? ' active' : ''">
+        Cart
+        <span class="nav-badge" th:if="${cartCount != null and cartCount > 0}" th:text="${cartCount}">0</span>
+    </a>
+    <a sec:authorize="hasRole('BUYER')" th:href="@{/buyer/orders}"
+       th:classappend="${activeTab == 'buyer-orders'} ? ' active' : ''">My Orders</a>
+
+    <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}"
+       th:classappend="${activeTab == 'admin-dashboard'} ? ' active' : ''">Admin</a>
+</nav>
+</body>
+</html>

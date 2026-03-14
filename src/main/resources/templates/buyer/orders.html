@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Marketplace</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/orders.css}">
+    <link rel="stylesheet" th:href="@{/css/products.css}">
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{fragments/header :: siteHeader('My Orders')}"></header>
+    <nav th:replace="~{fragments/header :: roleNav('buyer-orders')}"></nav>
+
+    <main class="orders-shell portal-main" data-buyer-orders-page="true">
+        <div class="orders-header">
+            <div>
+                <h2>Order History</h2>
+                <p class="portal-subtitle">Your latest status updates appear automatically.</p>
+            </div>
+            <a th:href="@{/products}" class="btn btn-primary">Continue Shopping</a>
+        </div>
+
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <table class="orders-table portal-table-wrap" th:if="${!#lists.isEmpty(orders)}">
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}" th:attr="data-order-id=${order.id}">
+                <td th:text="${'#' + order.id}">#998</td>
+                <td th:text="${order.items}">0</td>
+                <td th:text="${'$' + #numbers.formatDecimal(order.total, 1, 2)}">$0.00</td>
+                <td><span class="badge order-status-badge" th:classappend="${' status-' + #strings.toLowerCase(order.status)}" th:text="${order.status}"></span></td>
+                <td>
+                    <form class="cancel-order-form" th:if="${order.canCancel}" th:action="@{/buyer/orders/{id}/cancel(id=${order.id})}" method="post">
+                        <button type="submit" class="btn btn-small btn-secondary">Cancel</button>
+                    </form>
+                    <span class="cancel-order-disabled" th:if="${!order.canCancel}">-</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(orders)}">
+            <span class="empty-state-icon">&#128179;</span>
+            <h3>No orders placed</h3>
+            <p>Your purchases will show up here after checkout.</p>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

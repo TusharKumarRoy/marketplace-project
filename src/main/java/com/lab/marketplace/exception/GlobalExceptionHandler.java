@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.lab.marketplace.controller.rest")
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(ResourceNotFoundException.class)

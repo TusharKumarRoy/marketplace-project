@@ -42,6 +42,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers("/", "/home", "/login", "/register").permitAll()
+                .requestMatchers("/products", "/products/**").permitAll()
                 .requestMatchers("/css/**", "/js/**", "/images/**", "/static/**").permitAll()
                 .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
                 .requestMatchers("/api/products", "/api/products/**").permitAll() // Public product browsing
@@ -54,6 +55,8 @@ public class SecurityConfig {
                 
                 // Buyer endpoints
                 .requestMatchers("/buyer/**").hasRole("BUYER")
+                .requestMatchers("/cart", "/cart/**").hasRole("BUYER")
+                .requestMatchers("/orders/checkout", "/orders/place", "/orders/confirmation").hasRole("BUYER")
                 
                 // API endpoints with role-based access
                 .requestMatchers("/api/auth/me").authenticated()

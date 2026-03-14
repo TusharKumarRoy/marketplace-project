@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<body>
+<div th:fragment="productCard(product)" class="product-card">
+    <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+         th:src="${product.imageUrl}"
+         th:alt="${product.name}"
+         class="product-image">
+    <div th:unless="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+         class="product-image-placeholder">IMG</div>
+
+    <div class="product-card-body">
+          <span class="badge badge-category"
+              th:text="${product.category != null and !#strings.isEmpty(product.category) ? product.category : 'General'}">General</span>
+        <h3 class="product-card-title" th:text="${product.name}">Product Name</h3>
+        <p class="product-card-description" th:text="${product.description}">Description</p>
+
+        <div class="product-card-meta">
+            <div>
+                <span class="product-price" th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}">$0.00</span>
+            </div>
+            <span th:if="${product.stock > 10}" class="badge badge-in-stock">In Stock</span>
+            <span th:if="${product.stock > 0 and product.stock <= 10}" class="badge badge-low-stock">Low Stock</span>
+            <span th:if="${product.stock <= 0}" class="badge badge-out-of-stock">Out of Stock</span>
+        </div>
+    </div>
+
+    <div class="product-card-footer">
+        <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-secondary product-card-action">Details</a>
+          <a sec:authorize="hasRole('SELLER')"
+              th:if="${product.sellerUsername != null and product.sellerUsername == #authentication.name}"
+              th:href="@{/seller/products/{id}/edit(id=${product.id})}"
+              class="btn btn-primary product-card-action">Edit Product</a>
+        <a sec:authorize="hasRole('BUYER')"
+           th:href="@{/orders/checkout(productId=${product.id},qty=1)}"
+           class="btn btn-primary product-card-action">Buy Now</a>
+        <form sec:authorize="hasRole('BUYER')" th:action="@{/cart/add}" method="post" class="product-card-action-form">
+            <input type="hidden" name="productId" th:value="${product.id}">
+            <input type="hidden" name="qty" value="1">
+            <input type="hidden" name="redirect" value="/products">
+            <button type="submit" class="btn btn-secondary product-card-action">Add to Cart</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>
