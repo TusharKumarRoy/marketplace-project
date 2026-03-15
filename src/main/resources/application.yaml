@@ -4,9 +4,9 @@ spring:
 
   # Database Configuration
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/marketplace_db}
-    username: ${SPRING_DATASOURCE_USERNAME:marketplace_user}
-    password: ${SPRING_DATASOURCE_PASSWORD:marketplace_pass}
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
     hikari:
       maximum-pool-size: 10
@@ -40,8 +40,8 @@ spring:
   # Security
   security:
     user:
-      name: admin
-      password: admin
+      name: ${SPRING_SECURITY_USER_NAME}
+      password: ${SPRING_SECURITY_USER_PASSWORD}
 
 # Server Configuration
 server:
@@ -71,5 +71,5 @@ marketplace:
     version: "1.0.0"
   security:
     jwt:
-      secret: ${JWT_SECRET:your-secret-key-change-this-in-production}
+      secret: ${JWT_SECRET}
       expiration: 86400000 # 24 hours
