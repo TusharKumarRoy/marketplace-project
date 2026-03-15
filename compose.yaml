@@ -8,10 +8,10 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-marketplace_db}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-marketplace_user}
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-      SPRING_SECURITY_USER_NAME: ${SPRING_SECURITY_USER_NAME}
+      SPRING_SECURITY_USER_NAME: ${SPRING_SECURITY_USER_NAME:-admin}
       SPRING_SECURITY_USER_PASSWORD: ${SPRING_SECURITY_USER_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
       SERVER_PORT: 8080
@@ -24,8 +24,8 @@ services:
     image: postgres:16-alpine
     container_name: marketplace-postgres
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB:-marketplace_db}
+      POSTGRES_USER: ${POSTGRES_USER:-marketplace_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
@@ -34,7 +34,7 @@ services:
     networks:
       - marketplace-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-marketplace_user} -d ${POSTGRES_DB:-marketplace_db}"]
       interval: 10s
       timeout: 5s
       retries: 5
