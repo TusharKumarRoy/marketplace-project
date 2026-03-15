@@ -1,0 +1,18 @@
+spring:
+  # Database Configuration - dev defaults
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/marketplace_db}
+    username: ${SPRING_DATASOURCE_USERNAME:marketplace_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:marketplace_pass}
+
+  # Security - dev defaults
+  security:
+    user:
+      name: ${SPRING_SECURITY_USER_NAME:devuser}
+      password: ${SPRING_SECURITY_USER_PASSWORD:devpassword}
+
+# Application Custom Properties - dev defaults
+marketplace:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:dev-only-secret-key-not-for-production-use-32c}
