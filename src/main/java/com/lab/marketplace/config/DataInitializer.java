@@ -109,7 +109,7 @@ public class DataInitializer implements CommandLineRunner {
         }
 
         private void seedStarterProductsIfEmpty() {
-            long inStockProducts = productRepository.findInStockProducts().size();
+            long inStockProducts = productRepository.countInStockProducts();
             if (inStockProducts >= 3) {
                 log.info("Sufficient in-stock products already exist ({}); skipping starter seed", inStockProducts);
             return;
