@@ -131,4 +131,9 @@ public class ProductService {
                 .map(ProductResponse::fromEntity)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<String> getDistinctCategories() {
+        return productRepository.findDistinctCategories();
+    }
 }

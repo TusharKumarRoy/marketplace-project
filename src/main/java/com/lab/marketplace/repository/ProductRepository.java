@@ -37,6 +37,18 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findInStockProducts();
 
     /**
+     * Count products in stock
+     */
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.stock > 0 AND p.available = true")
+    long countInStockProducts();
+
+    /**
+     * Find distinct categories of available products
+     */
+    @Query("SELECT DISTINCT p.category FROM Product p WHERE p.category IS NOT NULL AND p.category <> ''")
+    List<String> findDistinctCategories();
+
+    /**
      * Find products by seller and availability
      */
     List<Product> findBySellerIdAndAvailable(Long sellerId, Boolean available);

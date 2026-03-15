@@ -2,10 +2,9 @@ package com.lab.marketplace.controller.web;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.Objects;
+import java.util.Locale;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -50,13 +49,7 @@ public class ProductWebController {
             products = productService.getAllProducts();
         }
 
-        Set<String> categories = productService.getAllProducts()
-                .stream()
-                .map(ProductResponse::getCategory)
-                .filter(Objects::nonNull)
-                .map(String::trim)
-                .filter(value -> !value.isBlank())
-                .collect(Collectors.toCollection(TreeSet::new));
+        Set<String> categories = new TreeSet<>(productService.getDistinctCategories());
 
         model.addAttribute("products", products);
         model.addAttribute("categories", categories);
@@ -191,7 +184,7 @@ public class ProductWebController {
                 ? mine
                 : mine.stream()
                 .filter(product -> product.getName() != null
-                        && product.getName().toLowerCase().contains(q.trim().toLowerCase()))
+                        && product.getName().toLowerCase(Locale.ROOT).contains(q.trim().toLowerCase(Locale.ROOT)))
                 .toList();
 
         model.addAttribute("products", filtered);

@@ -38,7 +38,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity (enable in production)
+            .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/api/**") // CSRF disabled for stateless REST API endpoints
+            )
             .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers("/", "/home", "/login", "/register").permitAll()

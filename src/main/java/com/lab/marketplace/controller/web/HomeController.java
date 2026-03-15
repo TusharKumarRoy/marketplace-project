@@ -35,7 +35,7 @@ public class HomeController {
     }
     
     @GetMapping("/home")
-    public String homeAlias() {
-        return "home";
+    public String homeAlias(Authentication authentication) {
+        return home(authentication);
     }
 }

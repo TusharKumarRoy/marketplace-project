@@ -9,6 +9,7 @@ import com.lab.marketplace.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ import java.util.Set;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Profile("!prod")
 public class DataInitializer implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
@@ -77,7 +79,7 @@ public class DataInitializer implements CommandLineRunner {
                     .build();
 
             userRepository.save(admin);
-            log.info("Created admin user - Username: {} | Password: admin123", adminUsername);
+            log.info("Created admin user with username: {}", adminUsername);
             log.warn("WARNING: Please change the admin password in production!");
         } else {
             log.info("Admin user already exists");
@@ -102,14 +104,14 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
 
             userRepository.save(seller);
-            log.info("Created default seller user - Username: {} | Password: seller123", sellerUsername);
+            log.info("Created default seller user with username: {}", sellerUsername);
         } else {
             log.info("Seller user already exists");
         }
         }
 
         private void seedStarterProductsIfEmpty() {
-            long inStockProducts = productRepository.findInStockProducts().size();
+            long inStockProducts = productRepository.countInStockProducts();
             if (inStockProducts >= 3) {
                 log.info("Sufficient in-stock products already exist ({}); skipping starter seed", inStockProducts);
             return;

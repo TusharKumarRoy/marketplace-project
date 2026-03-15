@@ -4,11 +4,15 @@
 <body>
 <header th:fragment="siteHeader(title)">
     <h1 th:text="${title}">Marketplace</h1>
-    <div class="user-info">
+    <div class="user-info" sec:authorize="isAuthenticated()">
         <span sec:authentication="name">Username</span>
         <form th:action="@{/logout}" method="post" style="display: inline;">
             <button type="submit" class="btn btn-secondary">Logout</button>
         </form>
+    </div>
+    <div class="user-info" sec:authorize="isAnonymous()">
+        <a th:href="@{/login}" class="btn btn-primary">Login</a>
+        <a th:href="@{/register}" class="btn btn-secondary">Register</a>
     </div>
 </header>
 
