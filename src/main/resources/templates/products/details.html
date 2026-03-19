@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - Marketplace</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/products.css}">
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{fragments/header :: siteHeader('Product Details')}"></header>
+    <nav th:replace="~{fragments/header :: roleNav('products')}"></nav>
+
+    <main>
+        <div class="empty-state" th:if="${product == null}">
+            <span class="empty-state-icon">&#128196;</span>
+            <h3>No product selected</h3>
+            <p>Return to product listing and choose an item to view details.</p>
+            <a th:href="@{/products}" class="btn btn-primary">Back to Products</a>
+        </div>
+
+        <section class="product-detail" th:if="${product != null}">
+            <img th:if="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                 th:src="${product.imageUrl}" th:alt="${product.name}" class="product-detail-image">
+            <div th:unless="${product.imageUrl != null and !#strings.isEmpty(product.imageUrl)}"
+                 class="product-detail-image-placeholder">IMG</div>
+
+            <div class="product-detail-info">
+                <span class="badge badge-category" th:text="${product.category}">Category</span>
+                <h2 class="product-detail-title" th:text="${product.name}">Product Name</h2>
+                <p class="product-detail-price" th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}">$0.00</p>
+                <p class="product-detail-description" th:text="${product.description}">Description</p>
+
+                <div class="product-detail-meta">
+                    <span><strong>Seller:</strong> <span th:text="${product.sellerUsername}">seller</span></span>
+                    <span><strong>Stock:</strong> <span th:text="${product.stock}">0</span></span>
+                </div>
+
+                <div class="product-detail-actions">
+                          <a sec:authorize="hasRole('SELLER')"
+                              th:if="${product.sellerUsername != null and product.sellerUsername == #authentication.name}"
+                              th:href="@{/seller/products/{id}/edit(id=${product.id})}"
+                              class="btn btn-primary">Edit Product</a>
+                    <a sec:authorize="hasRole('BUYER')"
+                       th:href="@{/orders/checkout(productId=${product.id},qty=1)}"
+                       class="btn btn-primary">Buy Now</a>
+                    <form sec:authorize="hasRole('BUYER')" th:action="@{/cart/add}" method="post" style="display: inline;">
+                        <input type="hidden" name="productId" th:value="${product.id}">
+                        <input type="hidden" name="qty" value="1">
+                        <input type="hidden" name="redirect" th:value="@{/products/{id}(id=${product.id})}">
+                        <button type="submit" class="btn btn-secondary">Add to Cart</button>
+                    </form>
+                    <a th:href="@{/products}" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

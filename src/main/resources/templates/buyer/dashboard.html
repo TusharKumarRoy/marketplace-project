@@ -5,43 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buyer Dashboard - Marketplace</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/products.css}">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Buyer Dashboard</h1>
-            <div class="user-info">
-                <span th:text="${username}">Username</span>
-                <a th:href="@{/logout}" class="btn btn-secondary">Logout</a>
-            </div>
-        </header>
-        
-        <main>
-            <div class="welcome-section">
-                <h2>Welcome to Marketplace</h2>
-                <p>Browse products and manage your orders.</p>
-            </div>
-            
-            <div class="dashboard-cards">
-                <div class="card">
-                    <h3>Browse Products</h3>
-                    <p>Explore available products</p>
-                    <a href="#" class="btn btn-primary">Shop Now</a>
+        <header th:replace="~{fragments/header :: siteHeader('Buyer Dashboard')}"></header>
+        <nav th:replace="~{fragments/header :: roleNav('buyer-dashboard')}"></nav>
+
+        <main class="portal-main">
+            <section class="portal-hero buyer-hero">
+                <div>
+                    <span class="portal-kicker">Buyer Space</span>
+                    <h2>Find products you love, then track every order live</h2>
+                    <p>Welcome back, <strong th:text="${username}">buyer</strong>. Jump into shopping, monitor deliveries, and manage your cart from one place.</p>
                 </div>
-                
-                <div class="card">
-                    <h3>My Orders</h3>
-                    <p>Track your order history</p>
-                    <a href="#" class="btn btn-primary">View Orders</a>
+                <div class="hero-actions">
+                    <a th:href="@{/products}" class="btn btn-primary">Shop Now</a>
+                    <a th:href="@{/buyer/orders}" class="btn btn-secondary">My Orders</a>
                 </div>
-                
-                <div class="card">
-                    <h3>Cart</h3>
-                    <p>View your shopping cart</p>
-                    <a href="#" class="btn btn-primary">View Cart</a>
+            </section>
+
+            <section class="quick-links-grid">
+                <article class="quick-link-card">
+                    <span class="quick-link-icon">Browse</span>
+                    <h3>Discover Products</h3>
+                    <p>Explore fresh listings and trending categories curated for buyers.</p>
+                    <a th:href="@{/products}" class="btn btn-primary">Explore</a>
+                </article>
+
+                <article class="quick-link-card">
+                    <span class="quick-link-icon">Orders</span>
+                    <h3>Track Orders</h3>
+                    <p>See processing, shipping, and delivery updates without manual refresh.</p>
+                    <a th:href="@{/buyer/orders}" class="btn btn-primary">Open Orders</a>
+                </article>
+
+                <article class="quick-link-card">
+                    <span class="quick-link-icon">Cart</span>
+                    <h3>Ready To Checkout</h3>
+                    <p>Review quantities, update items, and complete purchases quickly.</p>
+                    <a th:href="@{/cart}" class="btn btn-primary">Open Cart</a>
+                </article>
+            </section>
+
+            <section class="portal-section">
+                <div class="page-header portal-section-header">
+                    <h2>Featured Products</h2>
+                    <a th:href="@{/products}" class="btn btn-secondary">View All</a>
                 </div>
-            </div>
+
+                <div th:if="${#lists.isEmpty(featuredProducts)}" class="empty-state portal-empty-state">
+                    <h3>No products available yet</h3>
+                    <p>New products will appear here soon.</p>
+                </div>
+
+                <div class="products-grid" th:if="${!#lists.isEmpty(featuredProducts)}">
+                    <th:block th:each="product : ${featuredProducts}">
+                        <div th:replace="~{fragments/product-card :: productCard(product=${product})}"></div>
+                    </th:block>
+                </div>
+            </section>
         </main>
     </div>
+
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>

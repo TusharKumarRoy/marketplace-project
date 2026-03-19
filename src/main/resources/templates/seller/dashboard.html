@@ -5,43 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seller Dashboard - Marketplace</title>
     <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/products.css}">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Seller Dashboard</h1>
-            <div class="user-info">
-                <span th:text="${username}">Username</span>
-                <a th:href="@{/logout}" class="btn btn-secondary">Logout</a>
-            </div>
-        </header>
+        <header th:replace="~{fragments/header :: siteHeader('Seller Dashboard')}"></header>
+        <nav th:replace="~{fragments/header :: roleNav('seller-dashboard')}"></nav>
         
-        <main>
-            <div class="welcome-section">
-                <h2>Welcome to Seller Dashboard</h2>
-                <p>Manage your products and view orders here.</p>
-            </div>
-            
-            <div class="dashboard-cards">
-                <div class="card">
-                    <h3>My Products</h3>
-                    <p>View and manage your product listings</p>
-                    <a href="#" class="btn btn-primary">View Products</a>
+        <main class="portal-main">
+            <section class="portal-hero seller-hero">
+                <div>
+                    <span class="portal-kicker">Seller Control Panel</span>
+                    <h2>Run your storefront with live order intelligence</h2>
+                    <p class="portal-subtitle">Welcome back, <strong th:text="${username}">seller</strong>. Monitor inventory, update fulfillment status, and grow delivered revenue.</p>
                 </div>
-                
-                <div class="card">
-                    <h3>Orders</h3>
-                    <p>Track orders for your products</p>
-                    <a href="#" class="btn btn-primary">View Orders</a>
-                </div>
-                
-                <div class="card">
-                    <h3>Add Product</h3>
-                    <p>List a new product for sale</p>
-                    <a href="#" class="btn btn-primary">Add New</a>
+                <a th:href="@{/seller/products/new}" class="btn btn-primary">Add Product</a>
+            </section>
+
+            <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+            <div class="page-header portal-section-header">
+                <div>
+                    <h2>Business Overview</h2>
+                    <p class="portal-subtitle">Snapshot of products, pending orders, and delivered revenue.</p>
                 </div>
             </div>
+
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Total Products</h3>
+                    <p class="stat-number" th:text="${totalProducts}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Active Listings</h3>
+                    <p class="stat-number" th:text="${activeProducts}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Orders</h3>
+                    <p class="stat-number" th:text="${pendingOrders}">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Revenue</h3>
+                    <p class="stat-number" th:text="${'$' + #numbers.formatDecimal(totalRevenue, 1, 2)}">$0.00</p>
+                </div>
+            </div>
+
+            <section class="dashboard-actions">
+                <h2>Inventory Health</h2>
+                <div class="action-buttons">
+                    <a th:href="@{/seller/products}" class="btn btn-secondary">Manage Products</a>
+                    <a th:href="@{/seller/orders}" class="btn btn-secondary">Review Orders</a>
+                    <span class="badge badge-low-stock" th:if="${lowStockProducts > 0}" th:text="${lowStockProducts + ' low-stock product(s)'}">Low stock</span>
+                    <span class="badge badge-in-stock" th:if="${lowStockProducts == 0}">All products healthy</span>
+                </div>
+            </section>
+
+            <section class="portal-section">
+                <h2 class="portal-section-title">Recent Products</h2>
+                <div th:if="${#lists.isEmpty(recentProducts)}" class="empty-state portal-empty-state">
+                    <h3>No products yet</h3>
+                    <p>Add your first listing to start selling.</p>
+                </div>
+
+                <div class="orders-table portal-table-wrap" th:if="${!#lists.isEmpty(recentProducts)}">
+                    <table class="products-table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${recentProducts}">
+                            <td th:text="${product.name}">Product</td>
+                            <td th:text="${product.category != null ? product.category : 'Uncategorized'}">Category</td>
+                            <td th:text="${'$' + #numbers.formatDecimal(product.price != null ? product.price : 0, 1, 2)}">$0.00</td>
+                            <td th:text="${product.stock != null ? product.stock : 0}">0</td>
+                            <td>
+                                <span th:if="${product.stock != null and product.stock > 5}" class="badge badge-in-stock">Healthy</span>
+                                <span th:if="${product.stock != null and product.stock > 0 and product.stock <= 5}" class="badge badge-low-stock">Low</span>
+                                <span th:if="${product.stock == null or product.stock <= 0}" class="badge badge-out-of-stock">Out</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="portal-section">
+                <h2 class="portal-section-title">Recent Orders</h2>
+                <div th:if="${#lists.isEmpty(recentOrders)}" class="empty-state portal-empty-state">
+                    <h3>No orders yet</h3>
+                    <p>Your customer orders will appear here once purchases start.</p>
+                </div>
+
+                <div class="orders-table portal-table-wrap" th:if="${!#lists.isEmpty(recentOrders)}">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Buyer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Update</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${recentOrders}">
+                            <td th:text="${'#' + order.id}">#1</td>
+                            <td th:text="${order.buyerUsername}">buyer</td>
+                            <td th:text="${order.itemCount}">0</td>
+                            <td th:text="${'$' + #numbers.formatDecimal(order.totalAmount, 1, 2)}">$0.00</td>
+                            <td>
+                                <span class="order-status"
+                                      th:classappend="${' status-' + #strings.toLowerCase(order.status)}"
+                                      th:text="${order.status}">PENDING</span>
+                            </td>
+                            <td>
+                                <form class="status-update-form" th:if="${order.status.name() != 'DELIVERED'}"
+                                      th:action="@{/seller/orders/{id}/status(id=${order.id})}" method="post">
+                                    <input type="hidden" name="redirectPath" value="/seller/dashboard">
+                                    <select name="status" aria-label="Update order status">
+                                        <option th:each="option : ${statusOptions}"
+                                                th:value="${option.name()}"
+                                                th:text="${option.name()}"
+                                                th:selected="${option == order.status}">
+                                            PROCESSING
+                                        </option>
+                                    </select>
+                                    <button type="submit" class="btn btn-small btn-primary">Save</button>
+                                </form>
+                                <span th:if="${order.status.name() == 'DELIVERED'}">Completed</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
         </main>
     </div>
+
+    <script th:src="@{/js/main.js}"></script>
 </body>
 </html>

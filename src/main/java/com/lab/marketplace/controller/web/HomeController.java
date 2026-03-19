@@ -1,11 +1,12 @@
 package com.lab.marketplace.controller.web;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -34,7 +35,7 @@ public class HomeController {
     }
     
     @GetMapping("/home")
-    public String homeAlias(Authentication authentication) {
-        return home(authentication);
+    public String homeAlias() {
+        return "home";
     }
 }

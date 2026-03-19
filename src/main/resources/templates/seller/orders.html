@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Orders - Marketplace</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/orders.css}">
+    <link rel="stylesheet" th:href="@{/css/products.css}">
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{fragments/header :: siteHeader('Orders For My Products')}"></header>
+    <nav th:replace="~{fragments/header :: roleNav('seller-orders')}"></nav>
+
+    <main class="orders-shell portal-main">
+        <div class="orders-header">
+            <div>
+                <h2>Incoming Orders</h2>
+                <p class="portal-subtitle">Update fulfillment status and keep buyers informed in real time.</p>
+            </div>
+            <a th:href="@{/seller/products}" class="btn btn-secondary">Back to Products</a>
+        </div>
+
+        <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <table class="orders-table portal-table-wrap" th:if="${!#lists.isEmpty(orders)}">
+            <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Items</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Update</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${'#' + order.id}">#1001</td>
+                <td th:text="${order.customer}">buyer</td>
+                <td th:text="${order.items}">0</td>
+                <td th:text="${'$' + #numbers.formatDecimal(order.total, 1, 2)}">$0.00</td>
+                <td><span class="badge" th:classappend="${' status-' + #strings.toLowerCase(order.status)}" th:text="${order.status}"></span></td>
+                <td>
+                    <form class="status-update-form" th:if="${order.status.name() != 'DELIVERED'}"
+                          th:action="@{/seller/orders/{id}/status(id=${order.id})}" method="post">
+                        <input type="hidden" name="redirectPath" value="/seller/orders">
+                        <select name="status" aria-label="Update order status">
+                            <option th:each="option : ${statusOptions}"
+                                    th:value="${option.name()}"
+                                    th:text="${option.name()}"
+                                    th:selected="${option == order.status}">
+                                PROCESSING
+                            </option>
+                        </select>
+                        <button type="submit" class="btn btn-small btn-primary">Save</button>
+                    </form>
+                    <span th:if="${order.status.name() == 'DELIVERED'}">Completed</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="empty-state" th:if="${#lists.isEmpty(orders)}">
+            <span class="empty-state-icon">&#128221;</span>
+            <h3>No orders yet</h3>
+            <p>New customer purchases will appear here.</p>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

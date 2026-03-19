@@ -1,12 +1,13 @@
 package com.lab.marketplace.repository;
 
-import com.lab.marketplace.entity.Order;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.lab.marketplace.entity.Order;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -29,8 +30,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     /**
      * Find all orders for products sold by a specific seller
      */
-    @Query("SELECT DISTINCT o FROM Order o JOIN o.orderItems oi JOIN oi.product p WHERE p.seller.id = :sellerId")
-    List<Order> findOrdersForSeller(@Param("sellerId") Long sellerId);
+    @Query("SELECT DISTINCT o FROM Order o JOIN o.orderItems oi JOIN oi.product p WHERE p.seller.id = :sellerId AND o.status <> :excludedStatus")
+    List<Order> findOrdersForSeller(@Param("sellerId") Long sellerId,
+                                    @Param("excludedStatus") Order.OrderStatus excludedStatus);
 
     /**
      * Find orders by buyer ordered by created date descending
