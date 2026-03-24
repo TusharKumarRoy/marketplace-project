@@ -68,8 +68,8 @@ public class DataInitializer implements CommandLineRunner {
             // Create admin user
             User admin = User.builder()
                     .username(adminUsername)
-                    .email("admin@marketplace.com")
-                    .password(passwordEncoder.encode("admin123")) // Change in production!
+                    .email("admin@example.com")
+                    .password(passwordEncoder.encode("changeMeAdmin"))
                     .fullName("System Administrator")
                     .phoneNumber("000-000-0000")
                     .enabled(true)
@@ -77,8 +77,8 @@ public class DataInitializer implements CommandLineRunner {
                     .build();
 
             userRepository.save(admin);
-            log.info("Created admin user - Username: {} | Password: admin123", adminUsername);
-            log.warn("WARNING: Please change the admin password in production!");
+            log.info("Created admin user - Username: {}", adminUsername);
+            log.warn("WARNING: Default admin credentials are for development only. Configure a secure admin user in production.");
         } else {
             log.info("Admin user already exists");
         }
@@ -93,8 +93,8 @@ public class DataInitializer implements CommandLineRunner {
 
             User seller = User.builder()
                 .username(sellerUsername)
-                .email("seller@marketplace.com")
-                .password(passwordEncoder.encode("seller123"))
+                .email("seller@example.com")
+                .password(passwordEncoder.encode("changeMeSeller"))
                 .fullName("Default Seller")
                 .phoneNumber("000-111-2222")
                 .enabled(true)
@@ -102,7 +102,7 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
 
             userRepository.save(seller);
-            log.info("Created default seller user - Username: {} | Password: seller123", sellerUsername);
+            log.info("Created default seller user - Username: {}", sellerUsername);
         } else {
             log.info("Seller user already exists");
         }
