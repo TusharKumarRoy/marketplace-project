@@ -8,7 +8,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lab.marketplace.entity.Order;
 import com.lab.marketplace.entity.OrderItem;
@@ -18,7 +19,8 @@ import com.lab.marketplace.repository.OrderRepository;
 import com.lab.marketplace.repository.ProductRepository;
 import com.lab.marketplace.repository.UserRepository;
 
-@DataJpaTest
+@SpringBootTest
+@Transactional
 class OrderIntegrationTest {
 
 	@Autowired

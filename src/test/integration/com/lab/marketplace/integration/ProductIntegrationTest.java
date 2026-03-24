@@ -5,16 +5,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.lab.marketplace.entity.Product;
 import com.lab.marketplace.entity.User;
 import com.lab.marketplace.repository.ProductRepository;
 import com.lab.marketplace.repository.UserRepository;
 
-@DataJpaTest
+@SpringBootTest
+@Transactional
 class ProductIntegrationTest {
 
 	@Autowired
@@ -22,6 +25,12 @@ class ProductIntegrationTest {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@BeforeEach
+	void setUp() {
+		productRepository.deleteAll();
+		userRepository.deleteAll();
+	}
 
 	@Test
 	void findInStockProductsReturnsOnlyAvailableProductsWithPositiveStock() {
