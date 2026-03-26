@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Marketplace</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/orders.css}">
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{fragments/header :: siteHeader('Order Confirmation')}"></header>
+
+    <main class="confirmation-wrap">
+        <div class="confirmation-mark">&#10003;</div>
+        <h2>Order Placed Successfully</h2>
+        <p style="margin: 10px 0 24px; color: #666;">
+            Thanks for shopping with us. Your order ID is
+            <strong th:text="${'#' + orderId}">#1024</strong>.
+        </p>
+        <div class="action-buttons" style="justify-content: center;">
+            <a th:href="@{/buyer/orders}" class="btn btn-primary">View My Orders</a>
+            <a th:href="@{/products}" class="btn btn-secondary">Continue Shopping</a>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+</div>
+</body>
+</html>

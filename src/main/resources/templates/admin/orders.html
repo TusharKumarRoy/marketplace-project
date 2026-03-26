@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Orders - Admin</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Order Management</h1>
+            <div class="user-info">
+                <span sec:authentication="name">Username</span>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+            </div>
+        </header>
+        
+        <nav class="admin-nav">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+            <a th:href="@{/admin/users}">Users</a>
+            <a th:href="@{/admin/orders}" class="active">Orders</a>
+        </nav>
+        
+        <main>
+            <h2>All Orders</h2>
+            
+            <div class="orders-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Buyer</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Order Date</th>
+                            <th>Items</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.id}">1</td>
+                            <td th:text="${order.buyer.username}">buyer123</td>
+                            <td th:text="'$' + ${order.totalAmount}">$100.00</td>
+                            <td>
+                                <span th:class="'order-status status-' + ${#strings.toLowerCase(order.status)}" 
+                                      th:text="${order.status}">PENDING</span>
+                            </td>
+                            <td th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm')}">2024-01-01 12:00</td>
+                            <td th:text="${#lists.size(order.orderItems)}">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div th:if="${#lists.isEmpty(orders)}" class="no-data">
+                    <p>No orders found</p>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

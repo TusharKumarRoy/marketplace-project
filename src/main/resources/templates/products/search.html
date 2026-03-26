@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Products - Marketplace</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/products.css}">
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{fragments/header :: siteHeader('Search Products')}"></header>
+    <nav th:replace="~{fragments/header :: roleNav('products')}"></nav>
+
+    <main>
+        <div class="products-toolbar">
+            <form th:action="@{/products/search}" method="get" class="search-box" data-auto-trim-search>
+                <span class="search-icon">&#128269;</span>
+                <input type="text" name="q" placeholder="Type product name..." th:value="${searchQuery}">
+            </form>
+            <a th:href="@{/products}" class="btn btn-secondary">Back to Products</a>
+        </div>
+
+        <p class="no-data" th:if="${searchQuery != null and !#strings.isEmpty(searchQuery)}">
+            Search results for: <strong th:text="${searchQuery}"></strong>
+        </p>
+
+        <div th:if="${#lists.isEmpty(products)}" class="empty-state">
+            <span class="empty-state-icon">&#128269;</span>
+            <h3>No matching products</h3>
+            <p>Try another keyword.</p>
+        </div>
+
+        <div class="products-grid" th:if="${!#lists.isEmpty(products)}">
+            <th:block th:each="product : ${products}">
+                <div th:replace="~{fragments/product-card :: productCard(product=${product})}"></div>
+            </th:block>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

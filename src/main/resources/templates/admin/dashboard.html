@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Marketplace</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Admin Dashboard</h1>
+            <div class="user-info">
+                <span sec:authentication="name">Username</span>
+                <form th:action="@{/logout}" method="post" style="display: inline;">
+                    <button type="submit" class="btn btn-secondary">Logout</button>
+                </form>
+            </div>
+        </header>
+        
+        <nav class="admin-nav">
+            <a th:href="@{/admin/dashboard}" class="active">Dashboard</a>
+            <a th:href="@{/admin/users}">Users</a>
+            <a th:href="@{/admin/orders}">Orders</a>
+        </nav>
+        
+        <main>
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <p class="stat-number" th:text="${totalUsers}">0</p>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Total Orders</h3>
+                    <p class="stat-number" th:text="${totalOrders}">0</p>
+                </div>
+            </div>
+            
+            <div class="dashboard-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-buttons">
+                    <a th:href="@{/admin/users}" class="btn btn-primary">Manage Users</a>
+                    <a th:href="@{/admin/orders}" class="btn btn-primary">View All Orders</a>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

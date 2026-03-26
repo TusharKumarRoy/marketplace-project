@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace Home</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/products.css}">
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{fragments/header :: siteHeader('Marketplace Home')}"></header>
+
+    <main>
+        <section class="welcome-section">
+            <h2>Find Great Products From Trusted Sellers</h2>
+            <p>Browse categories, compare prices, and place orders in minutes.</p>
+            <div class="action-buttons" style="justify-content: center; margin-top: 20px;">
+                <a th:href="@{/products}" class="btn btn-primary">Browse Products</a>
+                <a th:href="@{/products/search}" class="btn btn-secondary">Search Catalog</a>
+            </div>
+        </section>
+
+        <section class="dashboard-actions">
+            <h2>Quick Access</h2>
+            <div class="dashboard-cards">
+                <div class="card" sec:authorize="hasRole('SELLER')">
+                    <h3>Seller Tools</h3>
+                    <p>Create and manage listings from your seller dashboard.</p>
+                    <a th:href="@{/seller/dashboard}" class="btn btn-primary">Seller Dashboard</a>
+                </div>
+                <div class="card" sec:authorize="hasRole('BUYER')">
+                    <h3>Buyer Area</h3>
+                    <p>Track orders and manage your checkout flow.</p>
+                    <a th:href="@{/buyer/dashboard}" class="btn btn-primary">Buyer Dashboard</a>
+                </div>
+                <div class="card">
+                    <h3>Latest Products</h3>
+                    <p>See all available products added by marketplace sellers.</p>
+                    <a th:href="@{/products}" class="btn btn-primary">View All</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+</div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

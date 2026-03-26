@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Marketplace</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <link rel="stylesheet" th:href="@{/css/orders.css}">
+</head>
+<body>
+<div class="container">
+    <header th:replace="~{fragments/header :: siteHeader('Checkout')}"></header>
+
+    <main class="checkout-layout">
+        <section class="checkout-card">
+            <h2 class="checkout-title">Shipping Details</h2>
+            <p class="checkout-subtitle">Enter your delivery information to complete this order.</p>
+
+            <form class="checkout-form" th:if="${!#lists.isEmpty(checkoutItems)}" th:action="@{/orders/place}" method="post">
+                <input type="hidden" name="productId" th:if="${selectedProductId != null}" th:value="${selectedProductId}">
+                <input type="hidden" name="qty" th:if="${selectedQty != null}" th:value="${selectedQty}">
+                <div class="form-group">
+                    <label for="address">Shipping Address</label>
+                    <textarea id="address" name="shippingAddress" placeholder="House, Road, Area, City" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input id="phone" name="phone" type="text" placeholder="01XXXXXXXXX" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <input id="notes" name="notes" type="text" placeholder="Optional">
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">Place Order</button>
+            </form>
+
+            <div class="empty-state checkout-empty" th:if="${#lists.isEmpty(checkoutItems)}">
+                <h3>No product selected for checkout</h3>
+                <p>Please choose a product first, then click Buy Now.</p>
+                <a th:href="@{/products}" class="btn btn-secondary">Browse Products</a>
+            </div>
+        </section>
+
+        <aside class="checkout-card">
+            <h2 class="checkout-title">Order Summary</h2>
+            <div class="checkout-row" th:each="item : ${checkoutItems}">
+                <span th:text="${item.name + ' x' + item.qty}">Item x1</span>
+                <strong th:text="${'$' + #numbers.formatDecimal(item.lineTotal, 1, 2)}">$0.00</strong>
+            </div>
+            <div class="checkout-row">
+                <span>Subtotal</span>
+                <strong th:text="${'$' + #numbers.formatDecimal(subtotal, 1, 2)}">$0.00</strong>
+            </div>
+            <div class="checkout-row">
+                <span>Shipping</span>
+                <strong th:text="${'$' + #numbers.formatDecimal(shipping, 1, 2)}">$0.00</strong>
+            </div>
+            <div class="checkout-row total-row">
+                <span>Total</span>
+                <strong th:text="${'$' + #numbers.formatDecimal(total, 1, 2)}">$0.00</strong>
+            </div>
+        </aside>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: siteFooter}"></footer>
+</div>
+</body>
+</html>
