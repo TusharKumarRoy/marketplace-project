@@ -85,10 +85,10 @@ At startup, the app seeds:
 - Roles: `ADMIN`, `SELLER`, `BUYER`
 - Default admin user:
 	- username: `admin`
-	- password: `admin123`
+	- password: `changeMeAdmin`
 - Default seller user:
 	- username: `seller`
-	- password: `seller123`
+	- password: `changeMeSeller`
 - Starter products (if catalog has too few in-stock items)
 
 Change default credentials before production use.
