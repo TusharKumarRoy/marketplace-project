@@ -312,6 +312,8 @@ Open: `http://localhost:8080`
 
 If port `8080` is occupied, set `SERVER_PORT` first.
 
+Deploy website link: https://minimartbd.onrender.com
+
 ### Run with Docker Compose
 
 1. Create `.env` in project root with:
