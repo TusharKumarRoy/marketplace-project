@@ -22,7 +22,7 @@
         <nav class="admin-nav">
             <a th:href="@{/admin/dashboard}" class="active">Dashboard</a>
             <a th:href="@{/admin/users}">Users</a>
-            <a th:href="@{/admin/orders}">Orders</a>
+            <!-- <a th:href="@{/admin/orders}">Orders</a> -->
         </nav>
         
         <main>
@@ -32,17 +32,17 @@
                     <p class="stat-number" th:text="${totalUsers}">0</p>
                 </div>
                 
-                <div class="stat-card">
+                <!-- <div class="stat-card">
                     <h3>Total Orders</h3>
                     <p class="stat-number" th:text="${totalOrders}">0</p>
-                </div>
+                </div> -->
             </div>
             
             <div class="dashboard-actions">
                 <h2>Quick Actions</h2>
                 <div class="action-buttons">
                     <a th:href="@{/admin/users}" class="btn btn-primary">Manage Users</a>
-                    <a th:href="@{/admin/orders}" class="btn btn-primary">View All Orders</a>
+                    <!-- <a th:href="@{/admin/orders}" class="btn btn-primary">View All Orders</a> -->
                 </div>
             </div>
         </main>
