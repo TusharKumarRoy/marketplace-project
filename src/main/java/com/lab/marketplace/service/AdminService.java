@@ -52,8 +52,8 @@ public class AdminService {
     
     @Transactional(readOnly = true)
     public List<Order> getAllOrders() {
-        log.info("Fetching all orders");
-        return orderRepository.findAll();
+        log.info("Fetching all orders with buyer information");
+        return orderRepository.findAllWithBuyer();
     }
     
     @Transactional(readOnly = true)

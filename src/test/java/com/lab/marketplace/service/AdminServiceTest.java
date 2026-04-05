@@ -66,7 +66,7 @@ class AdminServiceTest {
     @Test
     void getAllOrdersReturnsRepositoryData() {
         Order order = Order.builder().id(33L).build();
-        when(orderRepository.findAll()).thenReturn(List.of(order));
+        when(orderRepository.findAllWithBuyer()).thenReturn(List.of(order));
 
         List<Order> orders = adminService.getAllOrders();
 
