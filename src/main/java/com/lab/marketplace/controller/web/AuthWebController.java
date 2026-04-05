@@ -21,10 +21,7 @@ public class AuthWebController {
     private final UserService userService;
     
     @GetMapping("/login")
-    public String loginPage(@ModelAttribute("error") String error, Model model) {
-        if (error != null && !error.isEmpty()) {
-            model.addAttribute("error", error);
-        }
+    public String loginPage() {
         return "auth/login";
     }
     

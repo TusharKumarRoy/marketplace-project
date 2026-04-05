@@ -58,7 +58,7 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void createAdminUserIfNotExists() {
-        String adminUsername = "admin";
+        String adminUsername = "admin@minimartbd";
         
         if (!userRepository.existsByUsername(adminUsername)) {
             // Get ADMIN role
@@ -68,8 +68,8 @@ public class DataInitializer implements CommandLineRunner {
             // Create admin user
             User admin = User.builder()
                     .username(adminUsername)
-                    .email("admin@example.com")
-                    .password(passwordEncoder.encode("changeMeAdmin"))
+                    .email("admin@minimartbd.com")
+                    .password(passwordEncoder.encode("minimartbd"))
                     .fullName("System Administrator")
                     .phoneNumber("000-000-0000")
                     .enabled(true)

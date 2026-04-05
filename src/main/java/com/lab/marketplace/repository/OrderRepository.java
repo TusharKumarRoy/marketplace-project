@@ -38,4 +38,10 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
      * Find orders by buyer ordered by created date descending
      */
     List<Order> findByBuyerIdOrderByCreatedAtDesc(Long buyerId);
+
+    /**
+     * Find all orders with buyer eagerly loaded
+     */
+    @Query("SELECT o FROM Order o JOIN FETCH o.buyer ORDER BY o.createdAt DESC")
+    List<Order> findAllWithBuyer();
 }
